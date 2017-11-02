@@ -1,0 +1,365 @@
+
+<style>
+  #r{
+    width: 5cm;
+    height: 0.7cm;
+    padding: 1px;
+  }
+  input.bttn.btn-md.btn-primary {
+    margin-left: -10%;
+  }
+  #sear{
+    width: 5cm;
+    height: 0.7cm;
+    font-size: 13px;
+    margin-top: -4.2%;
+    margin-left: 31%;
+    font-family: sans-serif;
+    font-style: normal;
+
+  }
+  input#ha{
+    margin-left: -70%;
+  }
+  .form-control {
+    min-width: 0;
+    width: 10cm !important;
+    color:black;
+    border: double;
+  }
+  table#t01 {
+    width:20%;
+    text-align: center;
+    margin-left: 36%;
+  }
+  table#t01 tr:nth-child(even) {
+    background-color: silver;
+    text-align: center;
+  }
+  table#t01 tr:nth-child(odd) {
+    background-color:#fff;
+  }
+  table#t01 th {
+    background-color: green;
+    color: white;
+    text-align: center;
+  }
+
+
+  table#tab1{
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 99.2%;
+    border: 1px solid #ddd;
+    text-align: center;
+    table-layout: fixed;
+    height: 1cm;
+  }
+  table#tab2{
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 99%;
+    table-layout: fixed;
+    text-align: center;
+    overflow:scroll;
+  }
+  td{
+    word-wrap:break-word
+  }
+  tbody {
+    width:8cm;
+    overflow:scroll;
+  }
+</style>
+
+
+
+
+<% if user_signed_in? %>
+    <%if current_user.email == 'mac@mac.com' || current_user.email == 'school@mac.com'%>
+    <% if user_signed_in? &&  current_user.email != 'school@mac.com'%>
+
+        <%= form_for @result do |form| %>
+
+            <fieldset>
+
+              <legend>
+                <h3>Add New Student Result</h3></legend>
+              <div class="form-group">
+                <%= form.label 'ID Num' %>
+                <%= form.text_field :macid,class: "form-control", :size => 20, :maxlength => 6, :max => 6, value: 'JCL000' %>
+              </div>
+              <div class="form-group">
+                <%= form.label 'Student Name' %>
+                <%= form.text_field :name,class: "form-control", :size => 20, :maxlength => 40 %>
+              </div>
+              <div class="form-group" id="dropdown" %>
+                <%= form.label 'class' %>
+                <%= form.select :standard ,@res.all.collect {|p| [ p.standard] }, {include_blank: 'Select class',value: 'Select class'}, :onchange => 'test();',:class=>'form-control',datawidth:"400px" %>
+                <%= form.text_field :standard,class:"form-control", id: 'standard_new', :size => 20, :maxlength => 40,:disabled=>false%>
+              </div>
+              <div class="form-group">
+                <%= form.label :score %>
+                <%= form.text_field :score,class:"form-control" %>
+              </div>
+            </fieldset>
+            <p>
+            <div class="form_row">
+              <%= form.submit 'Add Results',  class: "btn btn-success"%>
+            </div>
+            </p>
+
+        <% end %>
+
+
+
+        <style>
+          .btn-responsive {
+            white-space: normal !important;
+            word-wrap: break-word;
+          }
+
+        </style>
+
+<% end %>
+
+    <% if @results.present? %>
+            <table><tr><td>
+        <%= form_for(@result, method: 'get' ) do |f|  %>
+            <h3> <%= label_tag(:r, "Search for:")  %>
+              <table>
+
+              <%= text_field_tag :r%>
+
+                <%= submit_tag "Search",id: 'sear' %>
+                  <h6 style="margin-left: 1%;color: crimson;">
+                    Note:: You can Search by ID num or Student Name or Result like
+                    students with greater than particular number like 20 or 30 etc
+                  </h6>
+              </table>
+            </h3>
+
+        <% end %>
+            </td><td>
+            <h4 align="center" style="margin-left: 5%;margin-top: -2%;">Grades are as follows</h4>
+            <table id="t01" style="width: 35%;margin-left: 36%;text-align: center;">
+              <tr>
+                <th>Grade</th>
+                <th>Marks</th>
+
+              </tr>
+              <tr>
+                <td>A+</td>
+                <td> 40-50 </td>
+
+              </tr>
+              <tr>
+                <td>A</td>
+                <td> 32-39 </td>
+
+              </tr>
+              <tr>
+                <td>B+</td>
+                <td> 25-31 </td>
+
+              </tr>
+              <tr>
+                <td>B</td>
+                <td> 17-24 </td>
+
+              </tr>
+              <tr>
+                <td>Fail</td>
+                <td> < 17 </td>
+
+              </tr>
+            </table></td>
+            </tr></table>
+    <% i=1 %>
+
+
+        <div align="center" style="margin-left: -0%" style="overflow-x:auto;text-align: center;">
+          <table id="tab1" align="center" class="responsive"  cellpadding="2" border="1" style="text-align-last: center;">
+
+            <thead font color ="white" bgcolor="green">
+            <th width="24"><font color="#fff8dc">ID:No</font></th>
+            <th width="100"><font color="#fff8dc">Student Name</font></th>
+            <th width="50"><font color="#fff8dc">Class</font></th>
+            <th width="35"><font color="#fff8dc">Result</font></th>
+            <th width="40"><font color="#fff8dc">Grade</font></th>
+              <% if user_signed_in? &&  current_user.email != 'school@mac.com'%>
+            <th width="40"><font color="#fff8dc">Edit</font></th>
+            <th width="40"><font color="#fff8dc">Delete</font></th>
+<% end %>
+            </thead>
+
+
+    <% @results.order('standard').each do |result|%>
+            <div id="table-wrapper">
+              <div id="table-scroll">
+                <table align="center" id= 'tab2'class="responsive"  cellpadding="1"  border="1" style="text-align-last: center;">
+                  <tbody>
+                  <tr align="center">
+                    <td width="24"><%= result.macid %></td>
+                    <td width="100"><%= h result.name %></td>
+                    <td width="50"><%= h result.standard %></td>
+                    <td width="35"><%= h result.score %></td>
+                    <% if result.score.to_i >= 40%>
+                        <td width="40"><%= 'A+' %></td>
+                    <% elsif result.score.to_i >= 32 %>
+                        <td width="40"><%= 'A' %></td>
+                    <% elsif result.score.to_i >= 25 %>
+                        <td width="40"><%= 'B+' %></td>
+                    <% elsif result.score.to_i >= 17 %>
+                        <td width="40"><%= 'B' %></td>
+                    <% elsif result.score.to_i < 17 %>
+                        <td width="40"><%= 'Fail' %></td>
+                    <% end %>
+                    <% if user_signed_in? &&  current_user.email != 'school@mac.com'%>
+                    <td width="40"><%= link_to 'Edit', edit_result_path(result.id) %></td>
+                    <td width="40"><%= link_to 'Delete',result, controller: 'results',id: result.id, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                 <% end %> </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+        <% end %>
+          </table>
+        </div>
+    <% end %>
+
+
+<%#= link_to 'New Result', new_result_path %>
+        <script type="text/javascript">
+          function test(){
+            if ($('select#result_standard').find('option:selected').val() !== "")
+            {
+              $('input#standard_new').attr("disabled", "disabled");
+            }
+            else
+            {
+              $('input#standard_new').removeAttr("disabled");
+            }
+          }
+
+        </script>
+<% end %>
+
+<% end %>
+
+
+
+
+
+
+<% if !user_signed_in? %>
+
+
+    <h4 align="center"> Your Results are open please fill the details below to get your results</h4>
+
+    <%= form_for(@result, method: 'get' ) do |f|  %>
+        <div style="margin-left: 6%"><table>
+            <td>ID Number:</td>
+            <td>
+          <%= text_field_tag(:macid,'',id: 'ha', class: 'form-control',placeholder: 'Enter Your ID')%>
+          </td> <br> <br>
+            <td>Class:</td> <td><%=select("standard",'', @res.all.collect {|p| [ p.standard ] }, { include_blank: 'Select class' },class: 'form-control',style: '    margin-left: -80%;') %></td>
+            <td><%= submit_tag "Show Result",class:'bttn btn-md btn-primary' %></td> </table>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <i style="color: red;font-size: 100%">  Please make sure that your name should be in the format<br>
+          &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          "INITIAL FIRSTNAME MIDDLENAME" (eg: G ARUN KUMAR)</i></div>
+    <% end %>
+    <% if @h.present? %>
+        <br><br>
+        <% for result in @h %>
+<h2 align="center"><%= result.name  %>&nbsp;&nbsp;Your Result is below:</h2>
+        <div align="center" style="margin-left: -0%" style="overflow-x:auto;text-align: center;">
+          <table id="tab1" align="center" class="responsive"  cellpadding="2" border="1" style="text-align-last: center;">
+
+            <thead font color ="white" bgcolor="green">
+
+            <th width="405.3"><font color="#fff8dc">ID No</font></th>
+            <th width="405.3"><font color="#fff8dc">Student Name</font></th>
+            <th width="319.967"><font color="#fff8dc">Class</font></th>
+            <th width="149.333"><font color="#fff8dc">Result</font></th>
+            <th width="149.317"><font color="#fff8dc">Grade</font></th>
+
+            </thead>
+          </table>
+        </div>
+
+
+
+            <div id="table-wrapper">
+              <div id="table-scroll">
+                <table align="center" id= 'tab2'class="responsive"  cellpadding="1"  border="1" style="text-align-last: center;">
+                  <tbody>
+                  <tr align="center">
+                    <td width="190"><%= h result.macid %></td>
+                    <td width="190"><%= h result.name %></td>
+                    <td width="150"><%= h result.standard %></td>
+
+        <td width="70"><%= h result.score %></td>
+                    <% if result.score.to_i >= 40%>
+                        <td width="40"><%= 'A+' %></td>
+                    <% elsif result.score.to_i >= 32 %>
+                        <td width="40"><%= 'A' %></td>
+                    <% elsif result.score.to_i >= 25 %>
+                        <td width="40"><%= 'B+' %></td>
+                    <% elsif result.score.to_i >= 17 %>
+                        <td width="40"><%= 'B' %></td>
+                    <% elsif result.score.to_i < 17 %>
+                        <td width="40"><%= 'Fail' %></td>
+                    <% end %>
+
+                  </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+
+        <% end %>
+        <br><br><br>
+        <h4 align="center" style="margin-left: -9%">Grades are as follows</h4>
+        <table id="t01">
+          <tr>
+            <th>Grade</th>
+            <th>Marks</th>
+
+          </tr>
+          <tr>
+            <td>A+</td>
+            <td> 40-50 </td>
+
+          </tr>
+          <tr>
+            <td>A</td>
+            <td> 32-39 </td>
+
+          </tr>
+          <tr>
+            <td>B+</td>
+            <td> 25-31 </td>
+
+          </tr>
+          <tr>
+            <td>B</td>
+            <td> 17-24 </td>
+
+          </tr>
+          <tr>
+            <td>Fail</td>
+            <td> < 17 </td>
+
+          </tr>
+        </table>
+
+
+
+    <% end %>
+
+
+<% end %>
