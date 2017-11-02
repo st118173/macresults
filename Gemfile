@@ -12,20 +12,10 @@ gem 'acts_as_votable'
 gem 'bourbon'
 gem 'alertify-rails'
 gem 'font-awesome-rails'
-gem 'best_in_place'
-gem 'will_paginate'
 
 # Use Puma as the app server
 #gem 'puma', '~> 3.0'
-gem 'figaro'
-gem 'puma'
-group :development do
-  gem 'capistrano'
-  gem 'capistrano3-puma'
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rvm'
-end
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

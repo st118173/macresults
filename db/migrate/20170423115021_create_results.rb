@@ -7,7 +7,7 @@ class CreateResults < ActiveRecord::Migration[5.0]
       t.string :score
 
       t.timestamps
-
+      add_index :results, [:name,:standard], unique: true
     end
   end
 end
